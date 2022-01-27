@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生徒情報検索画面</title>
+</head>
+
+<body>
+  <fieldset>
+    <legend>生徒情報検索画面</legend>
+    <a href="name_read.php">生徒一覧画面</a>
+    <div>
+      検索フォーム：<input type="text" id="search">
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>出席番号</th>
+          <th>国語</th>
+          <th>算数</th>
+          <th>英語</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="result">
+        <!-- ここに<tr><td>deadline</td><td>todo</td><tr>の形でデータが入る -->
+      </tbody>
+    </table>
+  </fieldset>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    $('#search').on('keyup', function (e) {
+      console.log(e.target.value);
+      const searchWord = e.target.value;
+      const requestUrl = "ajax_get.php";
+
+      axios
+       .get(`${requestUrl}?searchword=${searchWord}`)
+       .then(function(response){
+         console.log(response);
+         const array=[];
+         response.data.forEach(function(x){
+           array.push(`<tr><td>${x.Attendance_number}</td><td>${x.japanese}</td><td>${x.arithmetic}</td><td>${x.english}</td><tr>`);
+         });
+
+         $('#result').html(array);
+         
+       })
+       .catch(function(error){
+         console.log(error);
+       })
+    });  
+  </script>
+</body>
+
+</html>
